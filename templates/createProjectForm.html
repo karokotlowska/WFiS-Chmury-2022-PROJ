@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+<h1>{% block title %} Stwórz projekt {% endblock %}</h1>
+
+{% block content %}
+<div id="create">
+<form action="/createProject" method="POST">
+    <label for="name">Nazwa projektu:</label><br>
+    <input type="text" id="name" name="name"><br>
+    <label for="name">Dziedzina/obaszar badań:</label><br>
+    <input type="text" id="subject" name="subject"><br>
+    <input type="submit" value="Dodaj">
+</form> 
+</div>
+{% endblock %}

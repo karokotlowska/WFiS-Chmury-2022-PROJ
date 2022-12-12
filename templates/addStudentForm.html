@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+<h1>{% block title %} Dodaj studenta {% endblock %}</h1>
+
+{% block body %}
+    <div class="hire">
+        <h3>Dodaj studenta</h3>
+        <form action="/addStudent" method="POST">
+            <p>Imię*<input type="text" id="first" name="first"></p>
+            <p>Nazwisko*<input type="text" id="last" name="last"></p>
+            <p>Wydział*<input type="text" id="department" name="department"></p>
+            <p>
+                Podepnij projekt*
+                <input list="brow" id="project" name="project" autocomplete="off">
+                <datalist id="brow">
+                    {% for proj in projects_selection %}
+                        <option value="{{proj}}">
+                    {% endfor %}
+                </datalist> 
+            </p>
+            <p></p><input type="submit" value="Dodaj">
+        </form>
+    </div>
+{% endblock %}

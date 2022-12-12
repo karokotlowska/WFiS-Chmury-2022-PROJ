@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+<h1>{% block title %} Index {% endblock %}</h1>
+
+{% block content %}
+    {% if msg %}
+        <div class="msg">
+            <p>{{msg}}</p>
+        </div>
+    {% endif %}
+{% if projects %}
+    {% for proj in projects %}
+        {% include "snippets/project_properties.html" %}
+    {% endfor %}
+{% endif %}
+
+{% if students %}
+    {% for proj in students %}
+    <table>
+        <tr>
+            <th>STUDENT:</th>
+            <th>{{proj.firstname}}</th>
+            <th>{{proj.lastname}}</th>
+            <th>{{proj.department}}</th>
+        </tr>
+    </table>
+    {% endfor %}
+{% endif %}
+
+
+{% if projects_list %}
+<div class="hire">
+    <h3>Dodaj studenta</h3>
+    <form action="/addStudent" method="POST">
+        <p>Imię*<input type="text" id="first" name="first"></p>
+        <p>Nazwisko*<input type="text" id="last" name="last"></p>
+        <p>Wydział*<input type="text" id="department" name="department"></p>
+        <p>
+            Podepnij projekt*
+            <input list="brow" id="project" name="project" autocomplete="off">
+            <datalist id="brow">
+                {% for proj in projects_list %}
+                    <option value="{{proj}}">
+                {% endfor %}
+            </datalist> 
+        </p>
+        <p></p><input type="submit" value="Dodaj">
+    </form>
+</div>
+{% endif %}
+
+
+
+{% if search_projects %}
+<div class="hire">
+    <h3>Szukaj uczestników w danym projekcie</h3>
+    <form action="/showStudentsProjects" method="POST">
+        <p>
+            Wybierz projekt*
+            <input list="brow" id="project" name="project" autocomplete="off">
+            <datalist id="brow">
+                {% for proj in search_projects %}
+                    <option value="{{proj}}">
+                {% endfor %}
+            </datalist> 
+        </p>
+        <p></p><input type="submit" value="Szukaj">
+    </form>
+</div>
+{% endif %}
+
+
+{% if search_projects2 %}
+<div class="hire">
+    <h3>Wybierz projekt, który chcesz edytować</h3>
+    <form action="/showStudentsProjects" method="POST">
+        <p>
+            Wybierz projekt*
+            <input list="brow" id="project" name="project" autocomplete="off">
+            <datalist id="brow">
+                {% for proj in search_projects2 %}
+                    <option value="{{proj}}">
+                {% endfor %}
+            </datalist> 
+        </p>
+
+                <label for="name">Nazwa projektu:</label><br>
+                <input type="text" id="name" name="name"><br>
+                <label for="name">Dziedzina/obaszar badań:</label><br>
+                <input type="text" id="subject" name="subject"><br>
+        <p></p><input type="submit" value="Edytuj">
+    </form>
+</div>
+{% endif %}
+
+
+{% if search_students %}
+<div class="hire">
+    <h3>Szukaj projektów wybranego uczestnika</h3>
+    <form action="/showStudentProjects" method="POST">
+        <p>
+            Wybierz studenta*
+            <input list="brow" id="project" name="project" autocomplete="off">
+            <datalist id="brow">
+                {% for proj in search_students %}
+                    <option value="{{proj}}">
+                {% endfor %}
+            </datalist> 
+        </p>
+        <p></p><input type="submit" value="Szukaj">
+    </form>
+</div>
+{% endif %}
+
+{% endblock %}

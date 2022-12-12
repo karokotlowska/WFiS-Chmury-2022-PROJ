@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>{% block title %} {% endblock %} - FlaskApp</title>
+    <style>
+        h3 {
+            text-align: center;
+            color: #1eb2f1;
+        }
+        .content {
+            margin-left: 50px;
+        }
+    </style>
+    {% block script %} {% endblock %}
+    
+</head>
+<body>
+    <h3> Witamy na stronie miedzyuczelnianych projektów studenckich </h3>
+    <div class="w3-sidebar w3-bar-block" style="width:25%">
+        <a href="{{ url_for('index') }}" class="w3-bar-item w3-button">Strona główna</a>
+        <a href="{{ url_for('createProjectForm') }}" class="w3-bar-item w3-button">Stwórz projekt</a>
+        <a href="{{ url_for('updateProjectForm') }}" class="w3-bar-item w3-button">Edytuj projekt</a>
+        <a href="{{ url_for('showProjects') }}" class="w3-bar-item w3-button">Pokaż wszystkie projekty</a>
+        <a href="{{ url_for('createProjectForm') }}" class="w3-bar-item w3-button">Usuń projekt</a>
+        <a href="{{ url_for('addStudentForm') }}" class="w3-bar-item w3-button">Dodaj studenta</a>
+        <a href="{{ url_for('searchStudentsProjectsForm') }}" class="w3-bar-item w3-button">Pokaż studentów z danego projektu</a>
+        <a href="{{ url_for('createProjectForm') }}" class="w3-bar-item w3-button">Usuń studenta z projektu</a>
+        <a href="{{ url_for('showStudentsProjectsForm') }}" class="w3-bar-item w3-button">Pokaż projekty studenta</a>      
+    </div>
+    <hr>
+    <div class="content" style="margin-left:25%">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>
