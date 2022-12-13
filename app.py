@@ -1,12 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from connection import Connection
-# from connection import Connection
-# from employee import show_employee
-# from hire import add_employee
 
 app = Flask(__name__)
-# app.register_blueprint(show_employee, url_prefix='')
-# app.register_blueprint(add_employee, url_prefix='')
+#MATCH (n) DETACH DELETE n;
 
 @app.route("/")
 def index():
@@ -92,7 +88,8 @@ def showStudentsProjects():
     project = ' '.join(map(str, project))
     if request.method == 'POST':
         students = db.list_students(project)
-        print("list students", students)
+        if (len(students) == 0 ):
+            return render_template('index.html', msg = "Ten projekt nie ma jeszcze żadnych studentow")
         return render_template('index.html', students = students)
 
 @app.route("/showStudentsProjectsForm")
@@ -109,7 +106,8 @@ def showStudentProjects():
     db = Connection()
     student = request.form.get("project").split(' ')
     if request.method == 'POST':
-        projects = db.list_projects(student[0]) #pierwsze imie
+        projects = db.list_projects(student) 
+        print(projects)
         if (len(projects) == 0 ):
             return render_template('index.html', msg = "Ten student nie ma jeszcze żadnych projektów")
         return render_template('index.html', projects = projects)
@@ -123,5 +121,64 @@ def updateProjectForm():
         all = [proj["name"] for proj in all]
         return render_template('index.html', search_projects2 = all)
 
+@app.route("/updateProject", methods=['GET', 'POST'])
+def updateProject():
+    db = Connection()
+    project_name = request.form.get("project").split(' ')
+    project_name = project_name = ' '.join(map(str, project_name))
+    project = {
+            "name": project_name,
+            "new_name":request.form.get("name"),
+            "new_subject":request.form.get("subject")
+        }
+    if request.method == 'POST':
+        db.update_project(project)
+        return render_template('index.html', msg = "Zaktualizowano projekt")
+
+
+@app.route("/deleteProjectForm")
+def deleteProjectForm():
+    db = Connection()
+    if request.method == 'GET':
+        all = db.list_all()
+        all = [proj["name"] for proj in all]
+        return render_template('index.html', delete_projects = all)
+
+@app.route("/deleteProject", methods=['POST', 'DELETE'])
+def deleteProject():
+    db = Connection()
+    project_name = request.form.get("project").split(' ')
+    project_name = project_name = ' '.join(map(str, project_name))
+    if request.method == 'POST':
+        db.delete_project(project_name)
+        return render_template('index.html', msg = "Poprawnie usunięto projekt")
+
+
+@app.route("/deleteStudentFromProjectForm")
+def deleteStudentFromProjectForm():
+    db = Connection()
+    if request.method == 'GET':
+        all = db.list_all()
+        all = [proj["name"] for proj in all]
+        students = db.list_all_students()
+        students = [proj["firstname"] + ' ' + proj["lastname"] for proj in students]
+        print(all, students)
+        return render_template('index.html', delete_student_from_project = 1, projects_del = all, students_del = students)
+
+@app.route("/deleteStudentFromProject", methods=['POST', 'DELETE'])
+def deleteStudentFromProject():
+    db = Connection()
+
+    project_name = request.form.get("project").split(' ')
+    project_name = project_name = ' '.join(map(str, project_name))
+
+    name = request.form.get("student").split(' ')
+
+    print(name[0], name[1], project_name)
+    if request.method == 'POST':
+        db.delete_student_from_project(name, project_name)
+        return render_template('index.html', msg = "Poprawnie usunięto studenta z projektu")
+
 if __name__ == '__main__':
     app.run()
+    
